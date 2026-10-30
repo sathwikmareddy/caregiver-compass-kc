@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#103d41" />
+  <meta name="description" content="Caregiver Compass KC helps family cancer caregivers find trusted local resources and practical next steps." />
+  <title>Caregiver Compass KC | Find your next step</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="./resources.js" defer></script>
+  <script src="./glossary.js" defer></script>
+  <script src="./engine.js" defer></script>
+  <script src="./app.js" defer></script>
+  <script src="./dashboard.js" defer></script>
+  <script src="./financial-checker.js" defer></script>
+  <script src="./request-help.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="side-panel" aria-label="Primary navigation">
+      <a class="brand" href="#home" id="brand-home" aria-label="Caregiver Compass KC home">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none"><path d="M18 29s-12-7.4-12-15c0-3.7 2.7-6 6.1-6 2.4 0 4.3 1.2 5.9 3.4C19.6 9.2 21.5 8 23.9 8 27.3 8 30 10.3 30 14c0 7.6-12 15-12 15Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 19h4l2-4 2 7 2-3h3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span>caregiver<span class="brand-strong">compass</span><small>KANSAS CITY</small></span>
+      </a>
+      <div class="side-caption">YOUR SPACE</div>
+      <nav class="nav-list" aria-label="Sections">
+        <button class="nav-item active" data-view="home" type="button"><span class="nav-ico">⌂</span> Find support</button>
+        <button class="nav-item" data-view="directory" type="button"><span class="nav-ico">▦</span> Resource library</button>
+        <button class="nav-item" data-view="glossary" type="button"><span class="nav-ico">Aa</span> Cancer terms explained</button>
+        <button class="nav-item" data-view="give" type="button"><span class="nav-ico">♡</span> Donate &amp; volunteer</button>
+        <button class="nav-item" data-view="about" type="button"><span class="nav-ico">ⓘ</span> About this project</button>
+      </nav>
+      <div class="side-bottom">
+        <div class="side-message"><div class="side-message-icon">✦</div><strong>A small step is still a step.</strong><p>You don't have to figure everything out today.</p></div>
+        <p class="sidebar-privacy"><span class="privacy-dot"></span> Your answers stay in this browser session.</p>
+        <p class="sidebar-credit">UMKC student research prototype · 2026</p>
+      </div>
+    </aside>
+    <div class="content-shell">
+      <header class="topbar">
+        <div class="breadcrumbs"><span>Caregiver Compass</span><span class="crumb-slash">/</span><span id="breadcrumb-title">Find support</span></div>
+        <div class="top-actions"><span class="kc-indicator"><span class="indicator-dot"></span>Kansas City focused</span><button id="help-button" class="help-button" type="button">Need urgent help?</button></div>
+      </header>
+      <main id="main-content">
+        <section id="view-home" class="view">
+          <div class="hero">
+            <div class="hero-copy"><div class="eyebrow"><span class="star">✳</span> MADE FOR THE PEOPLE WHO SHOW UP</div><h1>You're caring for someone.<br><span>You deserve support, too.</span></h1><p>Cancer caregiving can feel like a lot. Share what's on your mind, and we'll help you discover a few practical next steps.</p><div class="hero-note"><span>✓</span> Free to explore <span class="note-sep">·</span> No sign-up <span class="note-sep">·</span> Trusted resources</div></div>
+            <div class="hero-art" aria-hidden="true"><div class="art-circle a"></div><div class="art-circle b"></div><div class="art-card art-card-1"><span>♥</span><div><b>Compassion</b><small>Always first</small></div></div><div class="art-card art-card-2"><span>✓</span><div><b>One step</b><small>At a time</small></div></div><div class="art-path"></div><div class="art-center">✦</div></div>
+          </div>
+          <div class="layout-main">
+            <section class="assessment-card" id="assessment-card" aria-labelledby="form-title">
+              <div class="section-top"><div class="section-icon">✳</div><div><p class="overline">START HERE</p><h2 id="form-title">What's feeling difficult right now?</h2><p class="section-sub">A few details help us point you toward the right support.</p></div></div>
+              <form id="assessment-form" novalidate>
+                <div class="field-block"><div class="field-label-row"><label for="caregiver-description">Tell us what's going on <span class="optional">(optional)</span></label><span class="example-tag">In your own words</span></div><textarea id="caregiver-description" rows="4" maxlength="800" placeholder="For example: My dad has chemotherapy next week. I can't drive him, and I'm worried about the cost of treatment..."></textarea><p class="field-hint">Please don't include names, dates of birth, or private medical details.</p></div>
+                <fieldset class="field-block category-set"><legend>What would help most? <span class="optional">(select any)</span></legend><div id="category-picker" class="category-picker"></div></fieldset>
+                <div class="field-grid"><div class="field-block"><label for="care-stage">Where are you in the journey?</label><select id="care-stage"><option value="diagnosis">Recently diagnosed</option><option value="treatment" selected>During treatment</option><option value="after">After treatment</option><option value="unsure">Not sure</option></select></div><div class="field-block"><label for="care-county">Location of person needing support</label><select id="care-county"><option value="unsure">Kansas City area / not sure</option><option value="jackson-mo">Jackson County, MO</option><option value="clay-mo">Clay County, MO</option><option value="cass-mo">Cass County, MO</option><option value="platte-mo">Platte County, MO</option><option value="johnson-ks">Johnson County, KS</option><option value="wyandotte-ks">Wyandotte County, KS</option><option value="other-kc">Other KC-area county</option><option value="outside">Outside the Kansas City region</option></select></div></div>
+                <p id="form-error" class="form-error" role="alert" hidden></p>
+                <div class="form-footer"><button type="submit" class="primary-button">Find my next steps <span aria-hidden="true">→</span></button><button type="button" id="example-button" class="text-button">Try an example scenario</button></div>
+              </form>
+            </section>
+            <aside class="right-rail"><div class="gentle-card"><span class="rail-icon">♡</span><div><strong>You're more than a caregiver.</strong><p>Whether you're a daughter, partner, friend, or neighbor—your needs matter.</p></div></div><div class="rail-card"><h3>How it works</h3><ol class="steps-list"><li><span class="step-count">1</span><div><strong>Tell us what's hard</strong><p>A few words or quick choices are enough.</p></div></li><li><span class="step-count">2</span><div><strong>We find relevant support</strong><p>Our matching system connects your needs to curated resources.</p></div></li><li><span class="step-count">3</span><div><strong>Take one small step</strong><p>You'll get a manageable plan with links and phone numbers.</p></div></li></ol></div><div class="trust-note"><span>✧</span><p><strong>Trust comes first.</strong> We link to established nonprofit, government, and health organizations. Service availability and eligibility must be confirmed.</p></div></aside>
+          </div>
+          <section class="glossary-teaser" aria-labelledby="teaser-glossary-title"><div class="teaser-emoji" aria-hidden="true">Aa</div><div><p class="overline">A LITTLE MORE CLARITY</p><h2 id="teaser-glossary-title">Heard a medical word you don't know?</h2><p>Learn what words like <strong>biopsy</strong>, <strong>remission</strong>, <strong>metastasis</strong> and <strong>copay</strong> mean, in everyday language.</p></div><button id="home-glossary-button" class="secondary-button" type="button">Explore the glossary →</button></section>
+          <section id="results" class="results" hidden aria-live="polite" aria-labelledby="result-heading"></section>
+        </section>
+        <section id="view-directory" class="view" hidden><div class="page-header"><p class="overline">CURATED HELP</p><h1>Resource library</h1><p>Explore the programs included in this Kansas City-focused prototype. Confirm program details and availability with each provider.</p></div><div class="directory-toolbar"><label class="search-label" for="library-search">Search resources</label><input id="library-search" type="search" placeholder="Search organization, service, or need" /><label class="search-label" for="library-category">Filter by need</label><select id="library-category"><option value="all">All types of support</option></select></div><p id="directory-count" class="directory-count" aria-live="polite"></p><div id="directory-list" class="directory-grid"></div></section>
+        <section id="view-glossary" class="view" hidden>
+          <div class="page-header"><p class="overline">WORDS MADE SIMPLE</p><h1>Cancer terms explained.</h1><p>Medical appointments can come with unfamiliar words and abbreviations. Search for a term, read an everyday-language explanation, and find a question to ask your care team.</p></div>
+          <div class="glossary-intro"><span class="glossary-intro-icon" aria-hidden="true">Aa</span><div><strong>We translate the words — not your test results.</strong><p>This is educational information, not an interpretation of a diagnosis, lab value, pathology report, or treatment plan. Ask your healthcare team what a word means for your loved one's situation.</p></div></div>
+          <div class="glossary-toolbar"><div><label for="glossary-search">Look up a medical word or abbreviation</label><input id="glossary-search" type="search" autocomplete="off" placeholder="Try chemo, CBC, metastasis, copay..." /></div><div><label for="glossary-category">Browse a topic</label><select id="glossary-category"><option value="all">All topics</option></select></div></div>
+          <div class="glossary-popular"><span>Quick lookups:</span><button type="button" data-quick-term="Chemotherapy">Chemo</button><button type="button" data-quick-term="Metastasis">Metastasis</button><button type="button" data-quick-term="Remission">Remission</button><button type="button" data-quick-term="Palliative care">Palliative care</button><button type="button" data-quick-term="CBC">CBC</button><button type="button" data-quick-term="Financial toxicity">Financial toxicity</button></div>
+          <div class="glossary-special"><strong>Important distinction:</strong> <button type="button" data-quick-term="Stage">Stage</button> describes how much cancer is present and where; <button type="button" data-quick-term="Grade">grade</button> describes how abnormal its cells look. <button type="button" data-quick-term="Palliative care">Palliative care</button> can accompany active cancer treatment, unlike <button type="button" data-quick-term="Hospice care">hospice care</button> whose focus is comfort when cure is no longer the goal.</div>
+          <div class="glossary-meta"><p id="glossary-count" class="directory-count" role="status" aria-live="polite"></p><button type="button" id="glossary-clear" class="text-button" hidden>Clear search and filters</button></div>
+          <div id="glossary-list" class="glossary-grid" aria-live="polite"></div>
+          <div id="glossary-more" class="glossary-more" hidden><button id="glossary-show-all" class="secondary-button" type="button">Show all matching words</button></div>
+          <div class="glossary-caution"><strong>A word alone cannot tell you how serious a condition is.</strong> If someone receiving cancer treatment has a fever or possible infection, contact their oncology team promptly according to their instructions. For emergencies, call 911 (U.S.). <a href="https://www.cancer.gov/about-cancer/treatment/side-effects/infection" target="_blank" rel="noopener noreferrer">NCI guidance on infection ↗</a></div>
+          <div class="glossary-sourcebox">Educational summaries developed from the <a href="https://www.cancer.gov/publications/dictionaries/cancer-terms" target="_blank" rel="noopener noreferrer">National Cancer Institute cancer dictionary</a>, <a href="https://www.cancer.org/cancer/understanding-cancer/glossary.html" target="_blank" rel="noopener noreferrer">American Cancer Society glossary</a>, and <a href="https://www.healthcare.gov/glossary/" target="_blank" rel="noopener noreferrer">HealthCare.gov insurance glossary</a>. Each term includes an official learning link. These summaries have not been individually clinician-reviewed.</div>
+        </section>
+        <section id="view-give" class="view" hidden>
+          <div class="page-header"><p class="overline">GIVE BACK TO KANSAS CITY</p><h1>Donate or become a volunteer.</h1><p>Looking to support caregivers and people with cancer? Find verified ways to contribute your time, money or supplies directly through established organizations.</p></div>
+          <div class="giving-alert"><strong>Looking for help instead?</strong> Use <button type="button" id="go-get-help">Find support</button> or the resource library. Donations made through the links below support organizations; this website does not collect funds or recruit volunteers.</div>
+          <div class="give-toolbar"><label for="give-filter">Explore ways to help</label><select id="give-filter"><option value="all">All opportunities</option><option value="Volunteer">Volunteer your time</option><option value="Donate money">Donate money</option><option value="Donate supplies">Donate items and supplies</option></select></div>
+          <p id="give-count" class="directory-count" aria-live="polite"></p><div id="give-list" class="directory-grid"></div>
+        </section>
+        <section id="view-about" class="view" hidden><div class="page-header"><p class="overline">THE PROJECT</p><h1>Technology that meets caregivers where they are.</h1><p>Caregiver Compass KC is a proof of concept developed for a UMKC cancer caregiver support project.</p></div><div class="about-grid"><article class="about-card"><span class="about-icon">◎</span><h2>Our goal</h2><p>Help someone go from “I don't know where to begin” to “I have a next step.” The website identifies needs, matches caregivers to actionable resources, and explains unfamiliar cancer-care terms in plain language.</p></article><article class="about-card"><span class="about-icon">◇</span><h2>How recommendations work</h2><p>An explainable text-and-category matching engine prioritizes resources relevant to the caregiver's concerns, location and journey stage. It does not generate medical advice or make eligibility decisions.</p></article><article class="about-card"><span class="about-icon">▣</span><h2>Privacy by design</h2><p>This prototype runs locally in your browser. It does not collect accounts, send entered text to an AI provider, or save health information to a server. Do not enter personal or private medical information.</p></article><article class="about-card"><span class="about-icon">✦</span><h2>What comes next</h2><p>Future work could include caregiver interviews, ongoing source verification, multilingual access, usability research, and optional consent-based language-model assistance.</p></article></div><div class="about-disclaimer"><strong>Important:</strong> This is a student demonstration, not a medical service, clinical decision tool, referral or availability guarantee. For medical questions, contact your care team. For immediate emergencies call 911 (U.S.).</div></section>
+      </main>
+      <footer class="footer"><span>Caregiver Compass KC · UMKC student proof of concept</span><span>Sources reviewed October 29–30, 2026 · Please verify with providers</span></footer>
+    </div>
+  </div>
+  <dialog id="help-dialog" class="help-dialog"><form method="dialog"><div class="dialog-top"><h2>Need support right now?</h2><button class="dialog-close" value="cancel" aria-label="Close">✕</button></div><p><strong>Medical emergency:</strong> Call 911 in the United States. For new or worrying symptoms, contact the patient's oncology or medical team directly. This website does not give medical guidance.</p><p><strong>Practical or emotional support:</strong> The American Cancer Society can be reached at <a href="tel:18002272345">1-800-227-2345</a>. For Kansas City community resources, call <a href="tel:211">211</a>.</p><button class="primary-button dialog-button" value="cancel">Got it</button></form></dialog>
+</body>
+</html>
