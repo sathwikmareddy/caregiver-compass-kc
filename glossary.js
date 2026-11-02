@@ -74,7 +74,54 @@
     ['Explanation of benefits','Money and insurance','An insurer statement showing how it handled a claim; it is generally not a bill.','It may arrive before or separately from a provider bill.','Can someone help compare the EOB with the provider bill?','EOB insurance statement',HEALTH]
   ];
   const cats=['Diagnosis','Treatment','Tests and scans','Side effects','Care and support','Money and insurance'];
-  const result=items.map((a,i)=>({id:'term-'+i,term:a[0],category:a[1],simple:a[2],context:a[3],question:a[4],aliases:a[5]||'',url:a[6],verified:'2026-10-30'}));
+  // Verified term-specific NCI definitions; do not fabricate or derive unverified slugs.
+  const specificNciLinks={
+  "Tumor": "tumor",
+  "Benign": "benign",
+  "Malignant": "malignant",
+  "Oncologist": "oncologist",
+  "Stage": "stage",
+  "Lymph nodes": "lymph-node",
+  "Biomarker": "biomarker",
+  "Genetic testing": "genetic-testing",
+  "Prognosis": "prognosis",
+  "Recurrence": "recurrence",
+  "Chemotherapy": "chemotherapy",
+  "Radiation therapy": "radiation-therapy",
+  "Targeted therapy": "targeted-therapy",
+  "Hormone therapy": "hormone-therapy",
+  "Treatment cycle": "treatment-cycle",
+  "Port": "port",
+  "Adjuvant therapy": "adjuvant-therapy",
+  "Neoadjuvant therapy": "neoadjuvant-therapy",
+  "Maintenance therapy": "maintenance-therapy",
+  "CBC": "complete-blood-count",
+  "ANC": "absolute-neutrophil-count",
+  "CT scan": "ct-scan",
+  "PET scan": "pet-scan",
+  "MRI": "mri",
+  "Tumor marker": "tumor-marker",
+  "Nausea": "nausea",
+  "Anemia": "anemia",
+  "Thrombocytopenia": "thrombocytopenia",
+  "Neuropathy": "peripheral-neuropathy",
+  "Mucositis": "mucositis",
+  "Lymphedema": "lymphedema",
+  "Alopecia": "alopecia",
+  "Cachexia": "cachexia",
+  "Palliative care": "palliative-care",
+  "Patient navigator": "patient-navigator",
+  "Respite care": "respite-care",
+  "Survivorship care plan": "survivorship-care-plan",
+  "Advance directive": "advance-directive",
+  "Informed consent": "informed-consent"
+};
+  for (const item of items) {
+    if (Object.prototype.hasOwnProperty.call(specificNciLinks,item[0])) {
+      item[6] = NCI + "/def/" + specificNciLinks[item[0]];
+    }
+  }
+  const result=items.map((a,i)=>({id:'term-'+i,term:a[0],category:a[1],simple:a[2],context:a[3],question:a[4],aliases:a[5]||'',url:a[6],verified:'2026-11-01'}));
   if(result.some(t=>!cats.includes(t.category)||!t.url.startsWith('https://')||!t.question))throw Error('Glossary data invalid');
   return Object.freeze(result);
 });

@@ -2,7 +2,7 @@
 (function(root){
   'use strict';
   const CATEGORIES = [
-    {id:'transport',label:'Transportation',keywords:['ride','rides','drive','driving','car','bus','transport','transportation','appointment transport','gas','fuel','uber','lyft','get to treatment','get to chemo','no way to get','cannot get to']},
+    {id:'transport',label:'Transportation',keywords:['ride','rides','drive','driving','car','bus','transport','transportation','appointment transport','gas','fuel','uber','lyft','get to treatment','get to chemo','no way to get','cannot get to','plane','flight','flying','air travel','medical flight','airplane']},
     {id:'money',label:'Financial assistance',keywords:['bill','bills','expense','expenses','afford','cost','costs','financial','finance','money','debt','rent','utility','utilities','prescription','insurance','copay','paying for','unemployed','lost income','budget','budgeting','financial counselor','money management','financial wellness','financial planning']},
     {id:'emotional',label:'Emotional support',keywords:['stressed','stress','alone','lonely','overwhelmed','scared','afraid','anxiety','anxious','worried','worry','depressed','emotion','mental','support group','exhausted','burnout','burned out']},
     {id:'appointments',label:'Appointments & questions',keywords:['appointment','appointments','doctor','nurse','questions','understand treatment','chemo','chemotherapy','radiation','schedule','treatment plan','medical team','test result']},
@@ -11,14 +11,16 @@
     {id:'lodging',label:'Lodging',keywords:['stay overnight','hotel','lodging','accommodation','out of town','far from hospital','place to stay','travel for treatment','housing near hospital']},
     {id:'food',label:'Food & nutrition',keywords:['food','meals','meal','groceries','nutrition','nutritional supplement','eating','pantry','hungry']},
     {id:'supplies',label:'Donated supplies',keywords:['donated','donation of','free supplies','supply','supplies','wheelchair','walker','medical equipment','wigs','wig','scarves','comfort items','mastectomy supplies','free equipment']},
-    {id:'volunteers',label:'Volunteer or community help',keywords:['volunteer','volunteers','neighbors helping','neighbors to help','someone to help','friends help','family help','helping calendar','need volunteers','help with chores','organize help','help with meals']},
+    {id:'volunteers',label:'Volunteer or community help',keywords:['volunteer','volunteers','neighbors helping','neighbors to help','someone to help','friends help','family help','helping calendar','need volunteers','help with chores','organize help','help with meals','gift registry','giftwellsoon','help registry']},
     {id:'insurance',label:'Insurance and medical bills',keywords:['insurance','coverage','insurance denied','insurance denial','appeal','medicaid','medicare','co-pay','copay','deductible','premium','hospital bill','medical bill','charity care']},
     {id:'fundraising',label:'Fundraising and donations',keywords:['fundraiser','fundraising','raise money','donations','crowdfunding','gofundme','collect donations','donate to me','financial donations']},
+    {id:'planning',label:'Care planning & decisions',keywords:['advance directive','living will','healthcare proxy','health care proxy','medical power of attorney','medical wishes','future medical decisions','end of life planning','care planning']},
+    {id:'children',label:'Children & family support',keywords:['child with cancer','kid with cancer','my child has cancer','my kid has cancer','childhood cancer','pediatric cancer','child with leukemia','family activities for children','child with a serious illness','hopekids']},
     {id:'navigation',label:'Where to start',keywords:['where to start','dont know','don’t know','confused','resources','information','social worker','navigate','navigate the system','new diagnosis','recently diagnosed','not sure what to do','first step']}
   ];
   const SIX_COUNTIES = ['jackson-mo','cass-mo','clay-mo','platte-mo','johnson-ks','wyandotte-ks'];
   const ACTION_INTROS = {
-    transport:'Plan travel before the next appointment',money:'Ask about the costs and support you may qualify for',emotional:'Find someone who understands the caregiving experience',appointments:'Get ready for the next conversation with the care team',daily:'Find help with one everyday task',work:'Make work and caregiving a little easier to balance',lodging:'Explore a place to stay for treatment',food:'Ask about meal and nutrition support',navigation:'Start with a resource navigator',supplies:'Ask about free or donated medical supplies',volunteers:'Organize help for specific everyday tasks',insurance:'Explore coverage and bill support',fundraising:'Explore options to ask your community for donations'
+    transport:'Plan travel before the next appointment',money:'Ask about the costs and support you may qualify for',emotional:'Find someone who understands the caregiving experience',appointments:'Get ready for the next conversation with the care team',daily:'Find help with one everyday task',work:'Make work and caregiving a little easier to balance',lodging:'Explore a place to stay for treatment',food:'Ask about meal and nutrition support',navigation:'Start with a resource navigator',supplies:'Ask about free or donated medical supplies',volunteers:'Organize help for specific everyday tasks',insurance:'Explore coverage and bill support',fundraising:'Explore options to ask your community for donations',planning:'Plan for future healthcare decisions',children:'Find support for your child and family'
   };
   const norm = v => String(v||'').toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9\s'-]/g,' ').replace(/\s+/g,' ').trim();
   function hasPhrase(text, term){
@@ -74,6 +76,8 @@
       if(r.id==='unitedway-211')fit-=7; // valuable fallback, but broad directory ≠ direct help
       if(c==='transport'){
         if(r.id==='acs-rides' && /(ride|drive|driving|transport)/.test(normalizedText))fit+=7;
+        if(r.id==='angel-flight-central' && /(flight|flying|air travel|airplane|plane)/.test(normalizedText))fit+=25;
+        if(r.id==='acs-rides' && /(flight|flying|air travel|airplane)/.test(normalizedText))fit-=12;
         if(r.id==='canceraction-gas' && !/(gas|fuel)/.test(normalizedText))fit-=5;
       }
       if(c==='money'){
@@ -87,6 +91,9 @@
       }
       if(c==='emotional' && r.id==='gildas-support')fit+=5;
       if(c==='volunteers' && r.id==='mylifeline')fit+=12;
+      if(c==='planning' && r.id==='caringinfo-directive')fit+=20;
+      if(c==='children' && r.id==='hopekids-kc')fit+=20;
+      if(c==='food' && r.id==='food-for-the-cure' && region==='kc')fit+=8;
       if(c==='supplies' && r.id==='canceraction-equipment')fit+=12;
       if(c==='insurance' && r.id==='paf-case')fit+=7;
       if(c==='fundraising' && r.id==='gofundme')fit+=12;

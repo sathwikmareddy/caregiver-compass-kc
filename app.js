@@ -4,7 +4,7 @@
   const R=window.CAREGIVER_RESOURCES;
   const G=window.CAREGIVER_GIVE_OPTIONS||[];
   const TERMS=window.CAREGIVER_GLOSSARY||[];
-  const icons={transport:'↗',money:'$',emotional:'♡',appointments:'▣',daily:'⌂',work:'◷',lodging:'⌑',food:'♧',navigation:'✳',supplies:'✚',volunteers:'♧',insurance:'▤',fundraising:'♥'};
+  const icons={transport:'↗',money:'$',emotional:'♡',appointments:'▣',daily:'⌂',work:'◷',lodging:'⌑',food:'♧',navigation:'✳',supplies:'✚',volunteers:'♧',insurance:'▤',fundraising:'♥',planning:'▣',children:'♡'};
   const selected=new Set();
   const $=id=>document.getElementById(id);
   const escapeHTML=(v)=>String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -73,7 +73,7 @@
     const mentioned=findKnownTerms(lastFreeText);
     const explained=mentioned.length?`<div class="terms-in-plan"><strong>Words you mentioned:</strong> ${mentioned.map(t=>`<button type="button" class="glossary-mention" data-see-term="${escapeHTML(t.term)}">${escapeHTML(t.term)} <span aria-hidden="true">↗</span></button>`).join(' ')} <span>Tap a word for an explanation.</span></div>`:'';
     const badges=plan.needs.map(n=>`<span class="need-badge">${escapeHTML(n.label)}</span>`).join('');
-    $('results').innerHTML=`<div class="results-header"><div><p class="overline">A PLAN FOR RIGHT NOW</p><h2 id="result-heading">Here are your next three steps.</h2><p>These suggestions are based on your selected concerns and our curated resources—not a diagnosis or an eligibility decision.</p></div><div class="result-actions"><button class="secondary-button" type="button" id="copy-plan">Copy plan</button><button class="secondary-button" type="button" id="print-plan">Print / save PDF</button></div></div><div class="need-strip" aria-label="Identified support needs">${badges}</div>${explained}<div class="resource-results">${plan.top.map((r,i)=>cardHTML(r,i+1)).join('')}</div><div class="results-bottom"><strong>A good next step is often a conversation.</strong> If you're unsure which program applies, tell your treatment team's social worker what you need and ask for local referrals. This demonstration does not guarantee services, determine eligibility, or provide medical advice. Source information was reviewed on October 29–30, 2026.</div>`;
+    $('results').innerHTML=`<div class="results-header"><div><p class="overline">A PLAN FOR RIGHT NOW</p><h2 id="result-heading">Here are your next three steps.</h2><p>These suggestions are based on your selected concerns and our curated resources—not a diagnosis or an eligibility decision.</p></div><div class="result-actions"><button class="secondary-button" type="button" id="copy-plan">Copy plan</button><button class="secondary-button" type="button" id="print-plan">Print / save PDF</button></div></div><div class="need-strip" aria-label="Identified support needs">${badges}</div>${explained}<div class="resource-results">${plan.top.map((r,i)=>cardHTML(r,i+1)).join('')}</div><div class="results-bottom"><strong>A good next step is often a conversation.</strong> If you're unsure which program applies, tell your treatment team's social worker what you need and ask for local referrals. This demonstration does not guarantee services, determine eligibility, or provide medical advice. Source information is checked as of November 1, 2026; verify current program details.</div>`;
     $('results').hidden=false;
     $('copy-plan').addEventListener('click',copyPlan);
     $('print-plan').addEventListener('click',()=>window.print());
@@ -133,7 +133,7 @@
       ${t.aliases?`<div class="term-aliases">Related search words: ${escapeHTML(t.aliases)}</div>`:''}
       <p class="term-simple">${escapeHTML(t.simple)}</p>
       <details class="term-details"><summary>Why you might hear it · Question to ask</summary><div class="term-details-body"><p><strong>Why it comes up</strong><span>${escapeHTML(t.context)}</span></p><p><strong>Ask your care team</strong><span>${escapeHTML(t.question)}</span></p></div></details>
-      <a href="${escapeHTML(t.url)}" target="_blank" rel="noopener noreferrer" class="term-source">Read from a trusted source ↗</a>
+      <a href="${escapeHTML(t.url)}" target="_blank" rel="noopener noreferrer" class="term-source">${t.url.includes('/def/')?'Read the NCI definition: '+escapeHTML(t.term):'Read the official reference for '+escapeHTML(t.term)} ↗</a>
     </article>`).join(''):`<div class="glossary-empty"><strong>We couldn't find that word in our starter glossary.</strong><p>Check the spelling or try an alternative. You can also look it up in the <a href="https://www.cancer.gov/publications/dictionaries/cancer-terms" target="_blank" rel="noopener noreferrer">official NCI cancer dictionary</a>. For the meaning of a term in a personal medical report, ask the healthcare team.</p></div>`;
   }
   function goGlossary(term){
