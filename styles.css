@@ -70,3 +70,15 @@
 @media print{#view-glossary{display:none!important}.glossary-teaser{display:none!important}.terms-in-plan{display:none!important}}
 .glossary-more[hidden]{display:none!important}
 @media(max-width:480px){.side-panel .brand>span:last-child{display:none}.side-panel .brand{flex:0 0 auto}.side-panel .nav-list{flex:1;min-width:0;justify-content:flex-end}.side-panel .nav-item{flex:0 0 auto;padding:7px 5px}.side-panel .nav-ico{font-size:20px}}
+
+/* Safety signposts: deliberately distinct from routine recommendation cards. */
+.safety-alert{margin-top:14px;padding:20px 22px;border-radius:14px;border:2px solid #c99541;background:#fff6e6;color:#513b1b;line-height:1.55}
+.safety-alert h3{font-size:1.16rem;color:inherit;margin:0 0 8px}
+.safety-alert p{margin:8px 0}
+.safety-emergency{border-color:#b54c48;background:#fff0ef;color:#702723}
+.safety-urgent{border-color:#bb8533;background:#fff6e6}
+.safety-primary{display:inline-flex;align-items:center;border-radius:8px;padding:9px 15px;background:#a52c28;color:white!important;font-weight:800;text-decoration:none}
+.safety-small{font-size:.85rem;color:inherit}
+.safety-followup{max-width:720px;margin:16px 0;color:#51655e;line-height:1.6}
+.review-date{font-size:.76rem;line-height:1.4;color:#5b746a;margin:12px 0 0}
+@media print{.safety-alert{break-inside:avoid}}

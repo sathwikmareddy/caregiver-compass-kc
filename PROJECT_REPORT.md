@@ -27,7 +27,7 @@ Family and friends offering unpaid support to someone with cancer may not know w
 **UI:** static HTML/CSS/JavaScript with a responsive form, results view and searchable resource library.  
 **Intent detection:** case normalization, curated keyword/synonym features, and weighted multi-label scores.  
 **Ranking:** resource-category overlap, user selections, regional relevance, care stage, provider diversity, and hard exclusions for specified six-county eligibility boundaries.  
-**Resource catalog:** 32 support entries plus 7 giving opportunities paraphrased from official organization pages, each with a provider, need tags, source URL, next step, and eligibility caveat.  
+**Resource catalog:** 40 support entries plus 7 giving opportunities paraphrased from official organization pages, each with a provider, need tags, source URL, next step, and eligibility caveat.  
 **Storage:** no database, cookies, user account or analytics. Text stays in page memory.  
 **Deployment:** static hosting or direct local file opening.
 
@@ -53,14 +53,14 @@ Source organizations include the American Cancer Society, Cancer Action KC, Gild
 | Task completion | Ask 3–5 volunteers to find a phone number and one suitable program | Not yet measured |
 | Time to next step | Time participants from start to selecting a concrete action | Not yet measured |
 | Source accuracy | Open every provider page and compare service/eligibility claims | Source metadata initially checked; final audit pending |
-| Technical correctness | Run `node --test tests/*.test.js` | 18 automated cases passing |
+| Technical correctness | Run `node --test tests/*.test.js` | 25 automated development tests passing |
 | Usability | Ask users to rate clarity (1–5) and report confusion | Not yet measured |
 
 Do not present targets as measured outcomes. Add actual data collected during the sprint.
 
 ## 7. Ethical considerations and boundaries
 
-The prototype does not request patient names or detailed medical history, does not upload text, and explicitly warns against entering sensitive details. It does not diagnose, recommend treatments, evaluate urgent symptoms, guarantee program eligibility, or replace human clinical navigation. Service eligibility is complex and changes; program limitations are visible rather than hidden. End-user testing should use fictional cases until a mentor reviews consent and privacy requirements for real caregivers.
+The prototype does not request patient names or detailed medical history, does not upload text, and explicitly warns against entering sensitive details. It does not diagnose, recommend treatments, provide clinical triage, guarantee program eligibility, or replace human clinical navigation. Service eligibility is complex and changes; program limitations are visible rather than hidden. End-user testing should use fictional cases until a mentor reviews consent and privacy requirements for real caregivers.
 
 ## 8. Known limitations and next steps
 
@@ -74,9 +74,17 @@ The prototype demonstrates a practical way to turn caregiver uncertainty into ma
 
 The prototype now distinguishes two user intentions: (1) caregivers seeking assistance and (2) community members wishing to donate or volunteer. The core intake has expanded to 13 need categories, including donated supplies, volunteer/community help, insurance and medical bills, and fundraising. The separate giving view has 7 outbound pathways for volunteer enrollment or charitable giving; no transactions or account creation occur inside the prototype. Financial assistance resources include screening and grants, hospital financial counselors, and financial-wellness education; the interface describes these differences clearly. MyLifeLine and CaringBridge coordinate help from an existing network and must not be presented as services that send unknown volunteers to a patient’s home.
 
-Evaluation at this stage: 18 automated Node tests pass. Program eligibility and funding have NOT been verified for any specific caregiver. The new website UI should be checked in a regular desktop/mobile browser before a public presentation; do not represent it as a validated service.
+Evaluation at this stage: 25 automated Node tests pass. Program eligibility and funding have NOT been verified for any specific caregiver. The new website UI should be checked in a regular desktop/mobile browser before a public presentation; do not represent it as a validated service.
 
 
 ## Added feature: Cancer Terms Explained (October 30, 2026)
 
 The prototype also contains a searchable 61-term, six-category cancer-care glossary. A caregiver can look up medical abbreviations, diagnostic words, side effects, caregiver services and health-insurance terminology. Each entry offers a simple definition, why it may come up, a useful question to ask the clinical team, and a link to an authoritative reference. A matching word in the free-text intake can link directly to its definition. This is educational content only, not medical interpretation. Demonstrate a search for “neutropenia” and “palliative care” to show the caregiver-centered approach.
+
+## November 7 supervisor-feedback response: safety and scaling
+
+The updated prototype now includes `safety.js`, a separate, deliberately conservative pre-recommendation **keyword signpost** for certain clear emergency and oncology-alert phrases. A possible emergency redirects attention to U.S. emergency services; fever or possible infection during treatment prompts immediate oncology-team contact. This is not validated medical triage and can miss dangerous inputs. Before public use, the wording, rules, usability, and false-negative/false-positive rates require clinical review and formal evaluation.
+
+For resource scaling, the team can operate an official-provider source registry and a scheduled GitHub Actions scanner. `maintenance/discover.mjs` produces a queue of possible new source links, never patient-facing recommendations. Reviewers inspect them and use `maintenance/publish.mjs` to validate approved entries before publishing. New links are detected only on the hubs in the registry, and ongoing manual verification remains essential. The scan has not been claimed as a live, comprehensive or always-on service.
+
+New automated development tests cover safety signposts, the existing recommendation logic, source discovery and human approval gating; outcomes are documented separately from any clinical validation. See `KATHY_FEEDBACK_UPGRADE.md`.

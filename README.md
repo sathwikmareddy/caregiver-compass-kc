@@ -29,7 +29,7 @@ python3 -m http.server 8000
 - Multi-label language matching with a transparent, weighted rule-based NLP engine
 - Journey-stage and county-aware resource prioritization
 - Three-step personal action plan with source links, contact numbers and eligibility cautions
-- Searchable resource directory with **32 manually curated caregiver-support entries**
+- Searchable resource directory with **40 manually curated caregiver-support entries in the supplied catalog**
 - Separate **Donate & volunteer** section with **7** official opportunities
 - Access to financial counseling, co-pay grants, volunteer coordination and donated supplies
 - **Cancer Terms Explained**: 61 plain-language medical, caregiving and insurance terms, searchable by word or abbreviation, filtered across 6 topics. Each card provides a simple definition, context, an example question to ask a clinician, and an official reference link. A term mentioned in the caregiver intake can also appear as a clickable explanation beside recommendations.
@@ -43,7 +43,7 @@ python3 -m http.server 8000
 - `resources.js` contains the auditable, curated services catalog
 - `glossary.js` contains the 61-entry educational glossary
 - `app.js` manages the UI and integrates the recommendation engine
-- `tests/engine.test.js` includes automated coverage for intent detection, eligibility filtering, and recommendations. `tests/glossary.test.js` checks glossary coverage, source domains, and key safety distinctions
+- `tests/safety.test.js` checks synthetic symptom-phrase signposts and existing recommendations; `tests/source-workflow.test.js` covers resource-discovery and approval safeguards
 
 The recommendation engine is **explainable, deterministic NLP/rule matching; it is not a machine-learned or LLM-based model**. That distinction is important in presentations. If mentor feedback calls for a language model, it can be integrated as an optional, consent-based enhancement after the reliable MVP is demonstrated.
 
@@ -69,16 +69,16 @@ Do **not** upload private patient information or API secrets. The project has no
 - No accounts, cookies, persistent local storage, patient records, or third-party analytics.
 - Users are asked not to enter patient names or detailed health information.
 - Resources are referrals for further information, **not** guarantees of care, eligibility or appointment availability.
-- This prototype does not evaluate symptoms, provide medical advice, diagnose, make treatment recommendations, or detect emergencies.
+- A lightweight, auditable **keyword safety signpost** highlights certain emergency or oncology-call phrases; it is NOT a clinically validated emergency detector, comprehensive triage system, diagnosis, or treatment recommendation. A missed match NEVER means the person is safe.
 - For a medical emergency in the US: 911. For concerns about symptoms or treatments: contact the treating medical team.
 - The glossary cannot interpret medical records, test results, stage, prognosis, or treatment options for an individual. Its short definitions are paraphrased from NCI, American Cancer Society, and HealthCare.gov and have not been clinically peer-reviewed. Individual terms link to public official references.
 
 ## Project limitations
 
-1. The resource catalog is a small, manually curated sample focused on the Kansas City area and several national providers, **not a comprehensive search engine**.
-2. Source checks were done October 29–30, 2026. Availability, hours, rules and funding may change; the user must verify with providers.
+1. The resource catalog is a small, human-curated sample focused on the Kansas City area and several national providers, **not a comprehensive search engine**.
+2. Original source checks were completed October 29–November 1, 2026. Availability, hours, rules and funding may change; the user must verify with providers.
 3. County filtering is conservative for listed Cancer Action programs and is not an eligibility determination.
-4. The keyword-based NLP method can miss nuanced expressions, context, and negation. It should be tested with caregivers and improved based on real feedback.
+4. The resource matcher and the separate safety-signpost layer can miss nuanced expressions, context, negation and symptoms entirely. It should be tested with caregivers and improved based on real feedback.
 5. There is no real-time provider status, live appointment scheduling, or human clinical review.
 
 ## Folder contents
@@ -87,12 +87,15 @@ Do **not** upload private patient information or API secrets. The project has no
 |---|---|
 | `index.html` | App layout and semantic UI |
 | `styles.css` | Responsive visual design |
-| `resources.js` | 32 caregiver-support records and 7 donate/volunteer listings with links |
+| `resources.js` | 40 existing caregiver-support records and 7 donate/volunteer listings with links |
 | `engine.js` | Intent detection, eligibility filter, resource ranking |
 | `glossary.js` | 61 searchable terms with plain-English explanations and official learning links |
-| `tests/glossary.test.js` | Glossary data and safety regression tests |
+| `safety.js` | Separate local-first emergency/oncology signpost rules (not clinical triage) |
+| `approved-resources.js` | Generated list of human-approved new catalog records (initially empty) |
+| `maintenance/` | Trusted-source discovery, review queue and audited publishing workflow |
+| `.github/workflows/resource-review.yml` | Optional weekly source scan when GitHub Actions is configured |
 | `app.js` | Intake, sample demo, plan generation, library UI |
-| `tests/engine.test.js` | Automated regression tests |
+| `tests/*.test.js` | New source-workflow, safety and recommendation smoke tests |
 | `DEMO_SCRIPT.md` | Four-minute presentation script |
 | `PROJECT_REPORT.md` | Ready-to-edit academic project report |
 | `SOURCE_AUDIT.md` | Verification references and reminders |
@@ -105,3 +108,12 @@ Do **not** upload private patient information or API secrets. The project has no
 Project context: Kathy Benich (project lead), Dr. Yugyung Lee (AI supervisor), Krishnasai Bharadwaj Atmakuri (AI mentor). Prototype prepared for development by Sathwik Reddy Mareddy, UMKC Computer Science. Resource information belongs to the linked providers and is reproduced as short paraphrases, not full content.
 
 **Development status:** Fully implemented baseline prototype with automated engine tests. Complete hands-on browser and stakeholder usability testing before representing it as a validated product.
+
+## Kathy feedback: new features (November 7, 2026)
+
+Read **`KATHY_FEEDBACK_UPGRADE.md`** for the complete architecture, demonstrations, safety limitations, and poster-session answers.
+
+- **New resources:** `maintenance/discover.mjs` scans an allowlist of official provider hub pages and writes a candidate report. The included GitHub Actions workflow can run this once per week **after being enabled in your GitHub repo**. Entries are **never automatically accepted**. A reviewer must create an audited entry in `maintenance/approved-resources.json`, then run `node maintenance/publish.mjs` to publish it to `approved-resources.js`. Currently, no additional entries are approved.
+- **Urgent help:** `safety.js` detects some explicit concerning phrases on-device. Red 911 and amber oncology-call messages can appear while typing; when detected at submission, the routine matching flow pauses. This is **not reliable symptom detection** and needs clinical validation before use with patients.
+- **Tests:** Run `node --test tests/*.test.js`. Tests use fictional inputs; a passing test suite does **not** validate clinical safety or real-time provider information.
+- **Hosting:** Publish the complete folder. The site works offline except for external provider links; scheduled source discovery is a **separate server-side GitHub Actions job** and requires internet.

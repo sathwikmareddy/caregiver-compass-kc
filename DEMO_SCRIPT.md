@@ -46,3 +46,9 @@ The main site works without internet: load `index.html`, click example, and show
 ## Added feature: Cancer Terms Explained (October 30, 2026)
 
 The prototype also contains a searchable 61-term, six-category cancer-care glossary. A caregiver can look up medical abbreviations, diagnostic words, side effects, caregiver services and health-insurance terminology. Each entry offers a simple definition, why it may come up, a useful question to ask the clinical team, and a link to an authoritative reference. A matching word in the free-text intake can link directly to its definition. This is educational content only, not medical interpretation. Demonstrate a search for “neutropenia” and “palliative care” to show the caregiver-centered approach.
+
+## Supervisor feedback — 75-second appendix (November 7)
+
+**Resource scaling:** Open `KATHY_FEEDBACK_UPGRADE.md`. Explain the **official-provider hub → candidate scan → reviewer verification → approved catalog publication** workflow. No unverified data flows into caregiver results; the scheduled scanner needs a GitHub repository with Actions enabled. Show `maintenance/latest-report.md` only after running a scan, or use the offline test fixture.
+
+**Safety demonstration (fictional data):** On **Find support**, type “My mom is on chemotherapy and has a fever of 100.4°F.” Show the amber warning and click **Find my next steps** to see that normal recommendations are paused. Change the text to “My dad cannot breathe.” Show the red **Call 911** warning. Then load the ordinary transportation example and show that regular support matching still works. State that these are *keyword warning examples*, not a validated detector.

@@ -1,6 +1,7 @@
 (function(){
   'use strict';
   const E=window.CaregiverEngine;
+  const Safety=window.CaregiverSafety;
   const R=window.CAREGIVER_RESOURCES;
   const G=window.CAREGIVER_GIVE_OPTIONS||[];
   const TERMS=window.CAREGIVER_GLOSSARY||[];
@@ -53,10 +54,31 @@
       <p class="summary">${escapeHTML(r.summary)}</p>
       ${rank?`<p class="reason"><strong>Why it fits:</strong> ${escapeHTML(r.reason)}</p><p class="next-step"><strong>Your next step:</strong> ${escapeHTML(r.action)}</p>`:''}
       <p class="resource-eligibility"><strong>Before you go:</strong> ${escapeHTML(r.eligibility)}</p>
+      ${r.verified?`<p class="review-date">Information last checked: ${escapeHTML(r.verified)} · Confirm with provider</p>`:''}
       ${r.eligibilityWarning?`<p class="caution">${escapeHTML(r.eligibilityWarning)}</p>`:''}
       <div class="card-links"><a href="${escapeHTML(r.url)}" target="_blank" rel="noopener noreferrer">Official source ↗</a>${phone}</div>
     </article>`;
   }
+  // Safety signposts take priority over ordinary service matching.
+  // This is a pattern-based flag, NOT a medical assessment or assurance of safety.
+  function safetyHTML(result){
+    const emergency=result.level==='emergency';
+    const title=emergency?'Possible medical emergency — call 911 (U.S.)':'Possible urgent medical concern — call the oncology team now';
+    const message=emergency
+      ?'If these symptoms are happening now, call 911 in the U.S. (or your local emergency number). Do not wait to use this website.'
+      :'During cancer treatment, fever of 100.4°F (38°C) or higher or possible infection needs immediate guidance. Call the oncology team, including the after-hours number. If you cannot reach them promptly, seek urgent medical care.';
+    const action=emergency?'<a class="safety-primary" href="tel:911">Call 911</a>':'<strong>Contact your oncology team using the number they gave you.</strong>';
+    return `<div class="safety-alert ${emergency?'safety-emergency':'safety-urgent'}"><h3>${title}</h3><p>${message}</p><p>${action}</p><p class="safety-small">Automated keyword warning; can miss or misinterpret symptoms. Not a diagnosis or triage decision. <a href="${escapeHTML(result.source)}" target="_blank" rel="noopener noreferrer">Official safety guidance ↗</a></p></div>`;
+  }
+  function currentSafety(){return Safety.assess($('caregiver-description').value,{stage:$('care-stage').value});}
+  function updateLiveSafety(){
+    const result=currentSafety(),el=$('live-safety');
+    el.hidden=result.level==='none';
+    el.innerHTML=result.level==='none'?'':safetyHTML(result);
+    if(result.level!=='none' && !$('results').hidden){$('results').hidden=true;lastPlan=null;}
+  }
+  $('caregiver-description').addEventListener('input',updateLiveSafety);
+  $('care-stage').addEventListener('change',updateLiveSafety);
   let lastPlan=null;
   let lastFreeText='';
   function findKnownTerms(text){
@@ -73,7 +95,7 @@
     const mentioned=findKnownTerms(lastFreeText);
     const explained=mentioned.length?`<div class="terms-in-plan"><strong>Words you mentioned:</strong> ${mentioned.map(t=>`<button type="button" class="glossary-mention" data-see-term="${escapeHTML(t.term)}">${escapeHTML(t.term)} <span aria-hidden="true">↗</span></button>`).join(' ')} <span>Tap a word for an explanation.</span></div>`:'';
     const badges=plan.needs.map(n=>`<span class="need-badge">${escapeHTML(n.label)}</span>`).join('');
-    $('results').innerHTML=`<div class="results-header"><div><p class="overline">A PLAN FOR RIGHT NOW</p><h2 id="result-heading">Here are your next three steps.</h2><p>These suggestions are based on your selected concerns and our curated resources—not a diagnosis or an eligibility decision.</p></div><div class="result-actions"><button class="secondary-button" type="button" id="copy-plan">Copy plan</button><button class="secondary-button" type="button" id="print-plan">Print / save PDF</button></div></div><div class="need-strip" aria-label="Identified support needs">${badges}</div>${explained}<div class="resource-results">${plan.top.map((r,i)=>cardHTML(r,i+1)).join('')}</div><div class="results-bottom"><strong>A good next step is often a conversation.</strong> If you're unsure which program applies, tell your treatment team's social worker what you need and ask for local referrals. This demonstration does not guarantee services, determine eligibility, or provide medical advice. Source information is checked as of November 1, 2026; verify current program details.</div>`;
+    $('results').innerHTML=`<div class="results-header"><div><p class="overline">A PLAN FOR RIGHT NOW</p><h2 id="result-heading">Here are your next three steps.</h2><p>These suggestions are based on your selected concerns and our curated resources—not a diagnosis or an eligibility decision.</p></div><div class="result-actions"><button class="secondary-button" type="button" id="copy-plan">Copy plan</button><button class="secondary-button" type="button" id="print-plan">Print / save PDF</button></div></div><div class="need-strip" aria-label="Identified support needs">${badges}</div>${explained}<div class="resource-results">${plan.top.map((r,i)=>cardHTML(r,i+1)).join('')}</div><div class="results-bottom"><strong>A good next step is often a conversation.</strong> If you're unsure which program applies, tell your treatment team's social worker what you need and ask for local referrals. This demonstration does not guarantee services, determine eligibility, or provide medical advice. Last-review dates are shown on resource cards; verify program details with providers.</div>`;
     $('results').hidden=false;
     $('copy-plan').addEventListener('click',copyPlan);
     $('print-plan').addEventListener('click',()=>window.print());
@@ -92,6 +114,15 @@
   $('assessment-form').addEventListener('submit',ev=>{
     ev.preventDefault();
     const text=$('caregiver-description').value.trim();
+    const signal=currentSafety();
+    if(signal.level!=='none'){
+      lastPlan=null;
+      $('form-error').hidden=true;
+      $('results').hidden=false;
+      $('results').innerHTML=`<h2 id="result-heading">Please seek medical help first</h2>${safetyHTML(signal)}<p class="safety-followup">Ordinary support recommendations are paused because this message may describe a serious medical concern. The website cannot determine whether you are safe. After the medical concern is addressed, you can return to browse support resources.</p>`;
+      $('results').scrollIntoView({behavior:'smooth',block:'start'});
+      return;
+    }
     if(!text&&!selected.size){$('form-error').textContent='Please describe one concern or select at least one support area.';$('form-error').hidden=false;return;}
     $('form-error').hidden=true;
     lastFreeText=text;
@@ -157,5 +188,5 @@
   }
   $('give-filter').addEventListener('change',renderGiving);
   $('go-get-help').addEventListener('click',()=>navigate('home'));
-  renderDirectory();renderGiving();renderGlossary();
+  renderDirectory();renderGiving();renderGlossary();updateLiveSafety();
 })();
